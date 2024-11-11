@@ -3,7 +3,6 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static String heroName;
     private static short heroMarbles;
     private static short heroMalus;
     private static short heroBonus;
@@ -48,18 +47,18 @@ public class Main {
 
     public static void main(String[] args) {
 
-        presentHeroes(listPlayers);
-        presentEnemies(listEnemies);
+        presentHeroes();
+        presentEnemies();
         String[] heroChoice = listPlayers[readUserInput("Choisissez un personnage ! Seong Gi-hun (0) - "
-                + "Kang Sae-byeok (1) - Cho Sang-woo (2)", 0, 2)];
+                + "Kang Sae-byeok (1) - Cho Sang-woo (2)", 2)];
 
-        heroName = heroChoice[0];
+        String heroName = heroChoice[0];
         heroMarbles = Short.parseShort(heroChoice[1]);
         heroMalus = Short.parseShort(heroChoice[2]);
         heroBonus = Short.parseShort(heroChoice[3]);
 
         nbrEncounters = Short.parseShort(listLevels[1][readUserInput("Choisissez une difficulté : Facile (0) - "
-                + "Moyen (1) - Impossible (2)", 0, 2)]);
+                + "Moyen (1) - Impossible (2)", 2)]);
 
         console("Vous débutez le jeu avec " + heroName + " avec " + heroMarbles + " billes, un bonus de "
                 + heroBonus + " bille(s) et un malus de " + heroMalus + " bille(s) !");
@@ -74,17 +73,17 @@ public class Main {
         return Integer.toString(random.nextInt(max - min + 1) + min);
     }
 
-    private static void presentHeroes(String[][] listPlayers) {
+    private static void presentHeroes() {
 
         console("------------------------------------");
 
-        for (int i = 0; i < listPlayers.length; i++) {
-            console(listPlayers[i][0] + " possède "
-                    + listPlayers[i][1] + " billes "
+        for (int i = 0; i < Main.listPlayers.length; i++) {
+            console(Main.listPlayers[i][0] + " possède "
+                    + Main.listPlayers[i][1] + " billes "
                     + "avec un mallus de "
-                    + listPlayers[i][2] + " billes en cas de défaite"
+                    + Main.listPlayers[i][2] + " billes en cas de défaite"
                     + " et un bonus de "
-                    + listPlayers[i][3]
+                    + Main.listPlayers[i][3]
                     + " billes en cas de voictoire !");
         }
 
@@ -93,21 +92,20 @@ public class Main {
 
     }
 
-    private static void presentEnemies(String[][] listEnemies) {
+    private static void presentEnemies() {
 
         console("------------------------------------");
 
-        for (int i = 0; i < listEnemies.length; i++) {
-            console(listEnemies[i][0] + " possède "
-                    + listEnemies[i][1] + " billes "
-                    + "et est agé de "
-                    + listEnemies[i][2] + " ans");
+        for (int i = 0; i < Main.listEnemies.length; i++) {
+            console(Main.listEnemies[i][0]
+                    + " est agé de "
+                    + Main.listEnemies[i][2] + " ans");
         }
 
         console("------------------------------------");
     }
 
-    private static short readUserInput(String prompt, int min, int max) {
+    private static short readUserInput(String prompt, int max) {
 
         Scanner scanner = new Scanner(System.in);
         short choice;
@@ -116,11 +114,11 @@ public class Main {
             console(prompt);
             choice = scanner.nextShort();
 
-            if (choice >= min && choice <= max) {
+            if (choice >= 0 && choice <= max) {
                 break;
             }
 
-            console("Veuillez entrer un chiffre entre " + min + " et " + max);
+            console("Veuillez entrer un chiffre entre " + "0" + " et " + max);
         }
         return choice;
     }
@@ -131,15 +129,15 @@ public class Main {
 
     private static void handleEncouter(short userAnswer, short enemyMarbles, short enemyIndex) {
 
-        if ((userAnswer % 2 == 0 && enemyMarbles % 2 == 0) || (userAnswer % 2 != 0 && enemyMarbles != 0)) {
+        if ((userAnswer % 2 == 0 && enemyMarbles % 2 == 0) || (userAnswer % 2 != 0 && enemyMarbles % 2 != 0)) {
 
             console("Bravo, c'est gagné, vous remportez " + enemyMarbles + " bille(s) + "
                     + "votre bonus de " + heroBonus + " bille(s) !");
 
-            heroMarbles += (enemyMarbles + heroBonus);
+            heroMarbles += (short) (enemyMarbles + heroBonus);
             listEnemies[enemyIndex][1] = "0";
         } else {
-            heroMarbles -= (enemyMarbles + heroMalus);
+            heroMarbles -= (short) (enemyMarbles + heroMalus);
             listEnemies[enemyIndex][1] = String.valueOf(Short.parseShort(listEnemies[enemyIndex][1]) + enemyMarbles);
             console("HAHAHA, c'est perdu, vous perdez " + enemyMarbles + " bille(s) + votre malus de "
                     + heroMalus + " bille(s) !");
@@ -173,7 +171,7 @@ public class Main {
             if (enemyAge >= 70) {
 
                 short cheatAnswer = readUserInput("Votre ennemi à plus de 70 ans, voulez-vous tricher"
-                        + " en profitant de son âge ? Oui - (0) Non - (1) ?", 0, 1);
+                        + " en profitant de son âge ? Oui - (0) Non - (1) ?", 1);
 
                 if (cheatAnswer == 0) {
 
@@ -191,7 +189,7 @@ public class Main {
             }
 
             short userAnswer = readUserInput("L'ennemi a des bille(s) dans sa main, "
-                    + "est-ce un nombre pair - (0) ou impair - (1) ?", 0, 1);
+                    + "est-ce un nombre pair - (0) ou impair - (1) ?", 1);
 
             handleEncouter(userAnswer, ennemyMarbles, enemyIndex);
             count++;
