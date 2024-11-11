@@ -60,6 +60,13 @@ public class Main {
 
         nbrEncounters = Short.parseShort(listLevels[1][readUserInput("Choisissez une difficulté : Facile (0) - "
                 + "Moyen (1) - Impossible (2)", 0,2)]);
+
+        console("Vous débutez le jeu avec " + heroName + " avec " + heroMarbles + " billes, un bonus de "
+            + heroBonus + " bille(s) et un malus de " + heroMalus + " bille(s) !");
+
+        console("Vous devrez affronter " + nbrEncounters + "ennemis pour gagner la partie ! Bonne chance !");
+
+        startFight();
     }
 
     private static String randomNumber(int min, int max) {
