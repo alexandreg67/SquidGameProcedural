@@ -134,6 +134,32 @@ public class Main {
     }
 
     private static void startFight() {
+        while (heroMarbles > 0 && nbrEncounters > 0) {
 
+            short count = 1;
+
+            short enemyIndex = Short.parseShort(randomNumber(0, listEnemies.length));
+            String ennemyName = listEnemies[enemyIndex][0];
+            short ennemyMarbles = Short.parseShort(listEnemies[enemyIndex][1]);
+            short enemyAge = Short.parseShort(listEnemies[enemyIndex][2]);
+
+            if (ennemyMarbles <= 0) {
+                continue;
+            }
+
+            console("Combat n° " + count + " - Vous rencontrez " + ennemyName + " preparez-vous au combat !");
+
+            if (enemyAge >= 70) {
+
+            }
+
+            short userAnswer = readUserInput("L'ennemi a des bille(s) dans sa main, "
+                    + "est-ce un nombre pair - (0) ou impair - (1) ?", 0, 1);
+
+            handleEncouter(userAnswer, ennemyMarbles, enemyIndex);
+            nbrEncounters--;
+            count++;
+
+        }
     }
 }
