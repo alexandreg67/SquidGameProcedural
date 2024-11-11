@@ -59,12 +59,12 @@ public class Main {
         heroBonus = Short.parseShort(heroChoice[3]);
 
         nbrEncounters = Short.parseShort(listLevels[1][readUserInput("Choisissez une difficulté : Facile (0) - "
-                + "Moyen (1) - Impossible (2)", 0,2)]);
+                + "Moyen (1) - Impossible (2)", 0, 2)]);
 
         console("Vous débutez le jeu avec " + heroName + " avec " + heroMarbles + " billes, un bonus de "
-            + heroBonus + " bille(s) et un malus de " + heroMalus + " bille(s) !");
+                + heroBonus + " bille(s) et un malus de " + heroMalus + " bille(s) !");
 
-        console("Vous devrez affronter " + nbrEncounters + "ennemis pour gagner la partie ! Bonne chance !");
+        console("Vous devrez affronter " + nbrEncounters + " ennemis pour gagner la partie ! Bonne chance !");
 
         startFight();
     }
@@ -131,14 +131,35 @@ public class Main {
 
     private static void handleEncouter(short userAnswer, short enemyMarbles, short enemyIndex) {
 
+        if ((userAnswer % 2 == 0 && enemyMarbles % 2 == 0) || (userAnswer % 2 != 0 && enemyMarbles != 0)) {
+
+            console("Bravo, c'est gagné, vous remportez " + enemyMarbles + " bille(s) + "
+                    + "votre bonus de " + heroBonus + " bille(s) !");
+
+            heroMarbles += (enemyMarbles + heroBonus);
+            listEnemies[enemyIndex][1] = "0";
+        } else {
+            heroMarbles -= (enemyMarbles + heroMalus);
+            listEnemies[enemyIndex][1] = String.valueOf(Short.parseShort(listEnemies[enemyIndex][1]) + enemyMarbles);
+            console("HAHAHA, c'est perdu, vous perdez " + enemyMarbles + " bille(s) + votre malus de "
+                    + heroMalus + " bille(s) !");
+            console("Grâce à vous, votre ennemi a maintenant dans ses mains "
+                    + listEnemies[enemyIndex][1] + " bille(s) !");
+        }
+
+        console("Votre ennemi avait dans ses mains " + enemyMarbles + " bille(s) !");
+
+        if (heroMarbles > 0) {
+            console("Après ce combat, il vous reste " + heroMarbles + " bille(s) !");
+        }
     }
 
     private static void startFight() {
+        short count = 1;
         while (heroMarbles > 0 && nbrEncounters > 0) {
 
-            short count = 1;
 
-            short enemyIndex = Short.parseShort(randomNumber(0, listEnemies.length));
+            short enemyIndex = Short.parseShort(randomNumber(0, listEnemies.length - 1));
             String ennemyName = listEnemies[enemyIndex][0];
             short ennemyMarbles = Short.parseShort(listEnemies[enemyIndex][1]);
             short enemyAge = Short.parseShort(listEnemies[enemyIndex][2]);
@@ -152,14 +173,14 @@ public class Main {
             if (enemyAge >= 70) {
 
                 short cheatAnswer = readUserInput("Votre ennemi à plus de 70 ans, voulez-vous tricher"
-                        + " en profitant de son âge ? Oui - (0) Non - (1) ?", 0,1);
+                        + " en profitant de son âge ? Oui - (0) Non - (1) ?", 0, 1);
 
                 if (cheatAnswer == 0) {
 
                     heroMarbles += ennemyMarbles;
                     listEnemies[enemyIndex][1] = "0";
                     console("Votre ennemi a été éliminé sans pitié, et vous remportez "
-                    + ennemyMarbles + " bille(s) automatiquement");
+                            + ennemyMarbles + " bille(s) automatiquement");
                     console("Vous avez désormais " + heroMarbles + " billes en votre possession");
 
                     continue;
@@ -173,9 +194,16 @@ public class Main {
                     + "est-ce un nombre pair - (0) ou impair - (1) ?", 0, 1);
 
             handleEncouter(userAnswer, ennemyMarbles, enemyIndex);
-            nbrEncounters--;
             count++;
+            nbrEncounters--;
 
+        }
+
+        if (heroMarbles > 0) {
+            console("La partie est finie, vous avez survécu à vos ennemis, "
+                    + "FÉLICITATIONS vous pouvez récupérer vos 45,6 milliards de Won sud-coréen !");
+        } else {
+            console("La partie est finie, vous avez perdu !! BIENVENU EN ENFER !");
         }
     }
 }
