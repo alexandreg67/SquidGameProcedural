@@ -3,6 +3,14 @@ import java.util.Scanner;
 
 public class Main {
 
+    private static String heroName;
+    private static short heroMarbles;
+    private static short heroMalus;
+    private static short heroBonus;
+
+    private static short nbrEncounters;
+
+
     private static final String[][] listPlayers =
             {
                     {"Seong Gi-Hun", "10", "3", "1"},
@@ -42,11 +50,21 @@ public class Main {
 
         presentHeroes(listPlayers);
         presentEnemies(listEnemies);
+        String[] heroChoice = listPlayers[readUserInput("Choisissez un personnage ! Seong Gi-hun (0) - "
+                + "Kang Sae-byeok (1) - Cho Sang-woo (2)", 0, 2)];
+
+        heroName = heroChoice[0];
+        heroMarbles = Short.parseShort(heroChoice[1]);
+        heroMalus = Short.parseShort(heroChoice[2]);
+        heroBonus = Short.parseShort(heroChoice[3]);
+
+        nbrEncounters = Short.parseShort(listLevels[1][readUserInput("Choisissez une difficulté : Facile (0) - "
+                + "Moyen (1) - Impossible (2)", 0,2)]);
     }
 
     private static String randomNumber(int min, int max) {
         Random random = new Random();
-        return Integer.toString(random.nextInt(max - min + 1) +min);
+        return Integer.toString(random.nextInt(max - min + 1) + min);
     }
 
     private static void presentHeroes(String[][] listPlayers) {
