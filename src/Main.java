@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
 
@@ -82,7 +83,21 @@ public class Main {
     }
 
     private static short readUserInput(String prompt, int min, int max) {
-        return (short) min;
+
+        Scanner scanner = new Scanner(System.in);
+        short choice;
+
+        while (true) {
+            console(prompt);
+            choice = scanner.nextShort();
+
+            if (choice >= min && choice <= max) {
+                break;
+            }
+
+            console("Veuillez entrer un chiffre entre " + min + " et " + max);
+        }
+        return choice;
     }
 
     private static void console(String msg) {
