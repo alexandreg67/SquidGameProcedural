@@ -151,6 +151,22 @@ public class Main {
 
             if (enemyAge >= 70) {
 
+                short cheatAnswer = readUserInput("Votre ennemi à plus de 70 ans, voulez-vous tricher"
+                        + " en profitant de son âge ? Oui - (0) Non - (1) ?", 0,1);
+
+                if (cheatAnswer == 0) {
+
+                    heroMarbles += ennemyMarbles;
+                    listEnemies[enemyIndex][1] = "0";
+                    console("Votre ennemi a été éliminé sans pitié, et vous remportez "
+                    + ennemyMarbles + " bille(s) automatiquement");
+                    console("Vous avez désormais " + heroMarbles + " billes en votre possession");
+
+                    continue;
+
+                } else {
+                    console("Votre comportement est noble, bonne chance lors de cette rencontre !");
+                }
             }
 
             short userAnswer = readUserInput("L'ennemi a des bille(s) dans sa main, "
